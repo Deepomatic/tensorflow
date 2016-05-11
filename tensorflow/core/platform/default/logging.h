@@ -63,22 +63,30 @@ class LogMessageFatal : public LogMessage {
 #define _TF_LOG_FATAL \
   ::tensorflow::internal::LogMessageFatal(__FILE__, __LINE__)
 
+#ifndef LOG // added by deepomatic
 #define LOG(severity) _TF_LOG_##severity
+#endif // LOG - added by deepomatic
 
 // TODO(jeff): Define a proper implementation of VLOG_IS_ON
+#ifndef VLOG_IS_ON // added by deepomatic
 #define VLOG_IS_ON(lvl) ((lvl) <= 0)
+#endif // VLOG_IS_ON - added by deepomatic
 
+#ifndef VLOG // added by deepomatic
 #define VLOG(lvl)      \
   if (VLOG_IS_ON(lvl)) \
   ::tensorflow::internal::LogMessage(__FILE__, __LINE__, tensorflow::INFO)
+#endif // VLOG - added by deepomatic
 
 // CHECK dies with a fatal error if condition is not true.  It is *not*
 // controlled by NDEBUG, so the check will be executed regardless of
 // compilation mode.  Therefore, it is safe to do things like:
 //    CHECK(fp->Write(x) == 4)
+#ifndef CHECK // added by deepomatic
 #define CHECK(condition)              \
   if (TF_PREDICT_FALSE(!(condition))) \
   LOG(FATAL) << "Check failed: " #condition " "
+#endif // CHECK - added by deepomatic
 
 // Function is overloaded for integral types to allow static const
 // integrals declared in classes and not defined to be used as arguments to
@@ -201,6 +209,7 @@ TF_DEFINE_CHECK_OP_IMPL(Check_GT, > )
 
 // In optimized mode, use CheckOpString to hint to compiler that
 // the while condition is unlikely.
+#ifndef CHECK_OP_LOG // added by deepomatic
 #define CHECK_OP_LOG(name, op, val1, val2)                            \
   while (::tensorflow::internal::CheckOpString _result =              \
              ::tensorflow::internal::name##Impl(                      \
@@ -208,34 +217,67 @@ TF_DEFINE_CHECK_OP_IMPL(Check_GT, > )
                  ::tensorflow::internal::GetReferenceableValue(val2), \
                  #val1 " " #op " " #val2))                            \
   ::tensorflow::internal::LogMessageFatal(__FILE__, __LINE__) << *(_result.str_)
+#endif // CHECK_OP_LOG - added by deepomatic
 
+#ifndef CHECK_OP // added by deepomatic
 #define CHECK_OP(name, op, val1, val2) CHECK_OP_LOG(name, op, val1, val2)
+#endif // CHECK_OP - added by deepomatic
 
 // CHECK_EQ/NE/...
+#ifndef CHECK_EQ // added by deepomatic
 #define CHECK_EQ(val1, val2) CHECK_OP(Check_EQ, ==, val1, val2)
+#endif // CHECK_EQ - added by deepomatic
+#ifndef CHECK_NE // added by deepomatic
 #define CHECK_NE(val1, val2) CHECK_OP(Check_NE, !=, val1, val2)
+#endif // CHECK_NE - added by deepomatic
+#ifndef CHECK_LE // added by deepomatic
 #define CHECK_LE(val1, val2) CHECK_OP(Check_LE, <=, val1, val2)
+#endif // CHECK_LE - added by deepomatic
+#ifndef CHECK_LT // added by deepomatic
 #define CHECK_LT(val1, val2) CHECK_OP(Check_LT, <, val1, val2)
+#endif // CHECK_LT - added by deepomatic
+#ifndef CHECK_GE // added by deepomatic
 #define CHECK_GE(val1, val2) CHECK_OP(Check_GE, >=, val1, val2)
+#endif // CHECK_GE - added by deepomatic
+#ifndef CHECK_GT // added by deepomatic
 #define CHECK_GT(val1, val2) CHECK_OP(Check_GT, >, val1, val2)
+#endif // CHECK_GT - added by deepomatic
+#ifndef CHECK_NOTNULL // added by deepomatic
 #define CHECK_NOTNULL(val)                                 \
   ::tensorflow::internal::CheckNotNull(__FILE__, __LINE__, \
                                        "'" #val "' Must be non NULL", (val))
+#endif // CHECK_NOTNULL - added by deepomatic
 
 #ifndef NDEBUG
 // DCHECK_EQ/NE/...
+#ifndef DCHECK // added by deepomatic
 #define DCHECK(condition) CHECK(condition)
+#endif // DCHECK - added by deepomatic
+#ifndef DCHECK_EQ // added by deepomatic
 #define DCHECK_EQ(val1, val2) CHECK_EQ(val1, val2)
+#endif // DCHECK_EQ - added by deepomatic
+#ifndef DCHECK_NE // added by deepomatic
 #define DCHECK_NE(val1, val2) CHECK_NE(val1, val2)
+#endif // DCHECK_NE - added by deepomatic
+#ifndef DCHECK_LE // added by deepomatic
 #define DCHECK_LE(val1, val2) CHECK_LE(val1, val2)
+#endif // DCHECK_LE - added by deepomatic
+#ifndef DCHECK_LT // added by deepomatic
 #define DCHECK_LT(val1, val2) CHECK_LT(val1, val2)
+#endif // DCHECK_LT - added by deepomatic
+#ifndef DCHECK_GE // added by deepomatic
 #define DCHECK_GE(val1, val2) CHECK_GE(val1, val2)
+#endif // DCHECK_GE - added by deepomatic
+#ifndef DCHECK_GT // added by deepomatic
 #define DCHECK_GT(val1, val2) CHECK_GT(val1, val2)
+#endif // DCHECK_GT - added by deepomatic
 
 #else
 
+#ifndef DCHECK // added by deepomatic
 #define DCHECK(condition) \
   while (false && (condition)) LOG(FATAL)
+#endif // DCHECK - added by deepomatic
 
 // NDEBUG is defined, so DCHECK_EQ(x, y) and so on do nothing.
 // However, we still want the compiler to parse x and y, because
@@ -244,12 +286,24 @@ TF_DEFINE_CHECK_OP_IMPL(Check_GT, > )
 #define _TF_DCHECK_NOP(x, y) \
   while (false && ((void)(x), (void)(y), 0)) LOG(FATAL)
 
+#ifndef DCHECK_EQ // added by deepomatic
 #define DCHECK_EQ(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_EQ - added by deepomatic
+#ifndef DCHECK_NE // added by deepomatic
 #define DCHECK_NE(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_NE - added by deepomatic
+#ifndef DCHECK_LE // added by deepomatic
 #define DCHECK_LE(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_LE - added by deepomatic
+#ifndef DCHECK_LT // added by deepomatic
 #define DCHECK_LT(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_LT - added by deepomatic
+#ifndef DCHECK_GE // added by deepomatic
 #define DCHECK_GE(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_GE - added by deepomatic
+#ifndef DCHECK_GT // added by deepomatic
 #define DCHECK_GT(x, y) _TF_DCHECK_NOP(x, y)
+#endif // DCHECK_GT - added by deepomatic
 
 #endif
 
