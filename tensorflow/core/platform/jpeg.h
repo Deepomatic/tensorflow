@@ -22,12 +22,12 @@ limitations under the License.
 #include "tensorflow/core/platform/google/build_config/jpeg.h"
 #elif defined(PLATFORM_POSIX) || defined(PLATFORM_POSIX_ANDROID) || \
     defined(PLATFORM_GOOGLE_ANDROID)
-extern "C" {
-#include "jpeg-9a/jerror.h"
-#include "jpeg-9a/jinclude.h"
-#include "jpeg-9a/jpeglib.h"
-#include "jpeg-9a/transupp.h"  // for rotations
-}
+//extern "C" {
+#include <stdio.h>
+#include <jpeglib.h>
+#include <jerror.h>
+//#include "jpeg-9a/transupp.h"  // for rotations
+//}
 #else
 #error Define the appropriate PLATFORM_<foo> macro for this platform
 #endif

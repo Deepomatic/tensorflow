@@ -38,11 +38,10 @@ cc_library(
     name = "platformlib",
     copts = tf_copts(),
     deps = [
-        "@jpeg_archive//:jpeg",
-        "@png_archive//:png",
         "@re2//:re2",
         "//tensorflow/core:protos_cc",
     ],
+    linkopts = ["-ljpeg", "-lpng"]
 )
 
 cc_library(

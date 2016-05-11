@@ -35,20 +35,6 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
   )
 
   native.new_http_archive(
-    name = "jpeg_archive",
-    url = "http://www.ijg.org/files/jpegsrc.v9a.tar.gz",
-    sha256 = "3a753ea48d917945dd54a2d97de388aa06ca2eb1066cbfdc6652036349fe05a7",
-    build_file = path_prefix + "jpeg.BUILD",
-  )
-
-  native.new_http_archive(
-    name = "png_archive",
-    url = "https://github.com/glennrp/libpng/archive/v1.2.53.zip",
-    sha256 = "c35bcc6387495ee6e757507a68ba036d38ad05b415c2553b3debe2a57647a692",
-    build_file = path_prefix + "png.BUILD",
-  )
-
-  native.new_http_archive(
     name = "six_archive",
     url = "https://pypi.python.org/packages/source/s/six/six-1.10.0.tar.gz#md5=34eed507548117b2ab523ab14b2f8b55",
     sha256 = "105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a",
