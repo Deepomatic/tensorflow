@@ -546,7 +546,7 @@ void BaseGPUDeviceFactory::CreateDevices(const SessionOptions& options,
     n = iter->second;
   }
   std::vector<int> valid_gpu_ids;
-  GetValidDeviceIds(&valid_gpu_ids);
+  GetValidDeviceIds(options, &valid_gpu_ids);
   if (static_cast<size_t>(n) > valid_gpu_ids.size()) {
     n = valid_gpu_ids.size();
   }
@@ -694,7 +694,7 @@ std::vector<CudaVersion> supported_cuda_compute_capabilities = {
 
 }  // namespace
 
-void BaseGPUDeviceFactory::GetValidDeviceIds(std::vector<int>* ids) {
+void BaseGPUDeviceFactory::GetValidDeviceIds(const SessionOptions& options, std::vector<int>* ids) {
   auto gpu_manager = GPUMachineManager();
   int min_gpu_core_count = GetMinGPUMultiprocessorCount();
   if (gpu_manager) {
@@ -752,8 +752,10 @@ void BaseGPUDeviceFactory::GetValidDeviceIds(std::vector<int>* ids) {
       int new_id = ids->size();
       ids->push_back(i);
 
-      LOG(INFO) << "Creating TensorFlow device (/gpu:" << new_id << ") -> "
-                << "(" << GetShortDeviceDescription(i, desc) << ")";
+      if(options.config.log_device_placement()) {
+        LOG(INFO) << "Creating TensorFlow device (/gpu:" << new_id << ") -> "
+                  << "(" << GetShortDeviceDescription(i, desc) << ")";
+      }
     }
   }
 }
