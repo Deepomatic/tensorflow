@@ -116,7 +116,7 @@ class BaseGPUDeviceFactory : public DeviceFactory {
                                        Allocator* gpu_allocator,
                                        Allocator* cpu_allocator) = 0;
 
-  void GetValidDeviceIds(std::vector<int>* ids);
+  void GetValidDeviceIds(const SessionOptions& options, std::vector<int>* ids);
 };
 
 }  // namespace tensorflow
