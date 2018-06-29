@@ -37,7 +37,9 @@ libjpegturbo_copts = select({
         "-mcpu=power8",
         "-mtune=power8",
     ],
-    "//conditions:default": [],
+    "//conditions:default": [
+        "-fvisibility=hidden", "-fPIC" # https://github.com/tensorflow/tensorflow/issues/14267#issuecomment-351780041
+    ],
 })
 
 cc_library(
