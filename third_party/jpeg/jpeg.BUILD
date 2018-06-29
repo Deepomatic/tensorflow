@@ -34,7 +34,9 @@ libjpegturbo_copts = select({
         "-mfloat-abi=softfp",
         "-fprefetch-loop-arrays",
     ],
-    "//conditions:default": [],
+    "//conditions:default": [
+        "-fvisibility=hidden", "-fPIC" # https://github.com/tensorflow/tensorflow/issues/14267#issuecomment-351780041
+    ],
 })
 
 cc_library(
