@@ -35,7 +35,7 @@ REQUIRED_PACKAGES = [
     'absl-py >= 0.1.6',
     'numpy >= 1.12.1',
     'six >= 1.10.0',
-    'protobuf >= 3.4.0',
+    'protobuf >= 3.6.1',
     'tensorflow-tensorboard >= 1.5.0, < 1.6.0',
 ]
 
