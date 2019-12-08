@@ -15,6 +15,7 @@ limitations under the License.
 
 #include "tensorflow/cc/saved_model/loader.h"
 
+#include <string.h>
 #include <unordered_set>
 
 #include "tensorflow/cc/saved_model/constants.h"
@@ -294,6 +295,30 @@ Status LoadSavedModel(const SessionOptions& session_options,
   }
   load_latency->GetCell(export_dir)->IncrementBy(load_latency_microsecs);
   return status;
+}
+
+void LoadSavedModelWrapper(const SessionOptions& session_options,
+                           const RunOptions& run_options, const char* export_dir,
+                           SavedModelBundle* const bundle,
+                           std::pair<error::Code, std::unique_ptr<char[]>> &status) {
+  const std::unordered_set<std::string> tags = {"serve"};
+  Status tf_status = LoadSavedModel(
+    session_options,
+    run_options,
+    export_dir,
+    tags,
+    bundle);
+
+  status.first = tf_status.code();
+  if (tf_status.ok()) {
+    status.second.release();
+  }
+  else {
+    std::unique_ptr<char[]> message;
+    size_t n = tf_status.error_message().size();
+    message.reset(new char[n]);
+    memcpy(message.get(), tf_status.error_message().c_str(), n);
+  }
 }
 
 bool MaybeSavedModelDirectory(const string& export_dir) {

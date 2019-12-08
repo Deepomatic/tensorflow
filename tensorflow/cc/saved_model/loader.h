@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <string>
 #include <unordered_set>
+#include <utility>
 
 #include "tensorflow/core/lib/core/status.h"
 #include "tensorflow/core/protobuf/meta_graph.pb.h"
@@ -51,6 +52,11 @@ Status LoadSavedModel(const SessionOptions& session_options,
                       const RunOptions& run_options, const string& export_dir,
                       const std::unordered_set<string>& tags,
                       SavedModelBundle* const bundle);
+
+void LoadSavedModelWrapper(const SessionOptions& session_options,
+                           const RunOptions& run_options, const char* export_dir,
+                           SavedModelBundle* const bundle,
+                           std::pair<error::Code, std::unique_ptr<char[]>> &status)
 
 /// Checks whether the provided directory could contain a SavedModel. Note that
 /// the method does not load any data by itself. If the method returns `false`,
